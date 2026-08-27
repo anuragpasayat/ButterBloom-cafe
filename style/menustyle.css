@@ -63,84 +63,8 @@
     flex-direction:row;
     border-color:#935d11;
     padding-top: 50px;
-    gap:50px;
+    gap:20px;
     border-radius:30px;
-}
-#a{
-    width:80px;
-    height:40px;
-    border-radius:30px;
-    background-color:transparent;
-    border: 2px solid #ee9a24;
-    font-family: "Poppins", sans-serif;
-    font-size:18px;
-    color:white;
-}
-#b{
-    width:120px;
-    height:40px;
-    border-radius:30px;
-    background-color:transparent;
-    border: 2px solid #ee9a24;
-     font-family: "Poppins", sans-serif;
-    font-size:18px;
-     color:white;
-}
-#c{
-    width:130px;
-    height:40px;
-    border-radius:30px;
-    background-color:transparent;
-    border: 2px solid #ee9a24;
-     font-family: "Poppins", sans-serif;
-    font-size:18px;
-     color:white;
-}#d{
-    width:170px;
-    height:40px;
-    border-radius:30px;
-    background-color:transparent;
-    border: 2px solid #ee9a24;
-     font-family: "Poppins", sans-serif;
-    font-size:18px;
-     color:white;
-}
-#e{
-    width:120px;
-    height:40px;
-    border-radius:30px;
-    background-color:transparent;
-    border: 2px solid #ee9a24;
-     font-family: "Poppins", sans-serif;
-    font-size:18px;
-     color:white;
-}#f{
-    width:120px;
-    height:40px;
-    border-radius:30px;
-    background-color:transparent;
-    border: 2px solid #ee9a24;
-     font-family: "Poppins", sans-serif;
-    font-size:18px;
-     color:white;
-}#g{
-    width:120px;
-    height:40px;
-    border-radius:30px;
-    background-color:transparent;
-    border: 2px solid #ee9a24;
-     font-family: "Poppins", sans-serif;
-    font-size:18px;
-     color:white;
-}#h{
-    width:130px;
-    height:40px;
-    border-radius:30px;
-    background-color:transparent;
-    border: 2px solid #ee9a24;
-     font-family: "Poppins", sans-serif;
-    font-size:18px;
-     color:white;
 }
 
 #shine{

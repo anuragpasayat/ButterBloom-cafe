@@ -49,14 +49,6 @@ function parsePrice(price) {
     return Number(String(price || "").replace(/[^\d.]/g, "")) || 0;
 }
 
-function normalizeStatus(status) {
-    return String(status || "ongoing").trim().toLowerCase();
-}
-
-function getStatusLabel(status) {
-    return status.charAt(0).toUpperCase() + status.slice(1);
-}
-
 function createOrderCard(order){
 
     const card = document.createElement("div");
@@ -189,31 +181,19 @@ function placeOrder(){
     let orders = getOrders();
 
     if(cartItems.length === 0){
-
         return;
-
     }
 
     const newOrder = {
-
-        orderId: orders.length + 1,
-
-        status: "ongoing",
-
         orderId: Date.now().toString().slice(-6),
-
+        status: "ongoing",
         items: cartItems
-
     };
 
     orders.unshift(newOrder);
-
     saveOrders(orders);
-
     renderOrders();
-
     localStorage.removeItem("cart");
-
     renderCart();
 
     alert("🎉 Order placed successfully!");
@@ -278,28 +258,25 @@ function renderOrders(){
 
     const orders = getOrders();
 
+    if (!ordersContainer) return;
+
     ordersContainer.innerHTML = "";
 
     if(orders.length === 0){
-
         emptyOrders.classList.remove("hide");
-
+        orderCards = [];
         return;
-
     }
 
     emptyOrders.classList.add("hide");
 
     orders.forEach(order=>{
-
         ordersContainer.appendChild(
-
             createOrderCard(order)
-
         );
-
     });
 
+    orderCards = Array.from(ordersContainer.querySelectorAll(".order-card"));
 }
 
 tabs.forEach(tab => {
@@ -309,19 +286,6 @@ tabs.forEach(tab => {
         filterOrders(tab.dataset.filter);
     });
 });
-
-if (ordersContainer) {
-    fetch("../data/orders.json")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Orders could not be loaded");
-            }
-
-            return response.json();
-        })
-        .then(orders => renderOrders(Array.isArray(orders) ? orders : []))
-        .catch(() => renderOrders([]));
-}
 
 renderOrders();
 renderCart();
@@ -361,5 +325,3 @@ contactForm.addEventListener("submit",(e)=>{
     contactForm.reset();
     popup.classList.remove("show");
 });
-
-console.log(document.querySelectorAll(".contact-us").length);
