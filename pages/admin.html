@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ButterBloom Cafe — Admin Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Dancing+Script:wght@400..700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../style/navstyle.css">
+    <link rel="stylesheet" href="../style/adminstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body class="admin-body">
+
+    <!-- ADMIN NAVBAR -->
+    <nav class="admin-navbar">
+        <div class="admin-brand">
+            <a href="../index.html" class="admin-logo-link">
+                <img src="../images/logo3.PNG" alt="ButterBloom Logo" class="admin-logo-img">
+            </a>
+            <span class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Staff Portal</span>
+        </div>
+
+        <ul class="admin-nav-links">
+            <li><a href="../index.html"><i class="fa-solid fa-store"></i> Customer Site</a></li>
+            <li><a href="menu.html"><i class="fa-solid fa-utensils"></i> Menu</a></li>
+            <li><a href="orders.html"><i class="fa-solid fa-bag-shopping"></i> My Orders</a></li>
+        </ul>
+
+        <div class="admin-user-control" id="adminUserControl" style="display: none;">
+            <span class="admin-logged-as"><i class="fa-solid fa-user-gear"></i> Admin</span>
+            <button class="logout-btn" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
+    </nav>
+
+    <!-- AUTHENTICATION SCREEN -->
+    <div class="login-wrapper" id="loginScreen">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-icon">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h2>Staff Login</h2>
+                <p>Enter your credentials to access the ButterBloom Admin Console.</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="adminUsername"><i class="fa-solid fa-user"></i> Username</label>
+                    <input type="text" id="adminUsername" placeholder="e.g. admin" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="adminPassword"><i class="fa-solid fa-key"></i> Password</label>
+                    <input type="password" id="adminPassword" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+
+                <div class="login-error-msg" id="loginErrorMsg" style="display: none;">
+                    <i class="fa-solid fa-circle-exclamation"></i> Invalid username or password.
+                </div>
+
+                <button type="submit" class="admin-submit-btn">
+                    <i class="fa-solid fa-right-to-bracket"></i> Sign In to Dashboard
+                </button>
+            </form>
+
+            <div class="login-hint">
+                <p><i class="fa-solid fa-circle-info"></i> Default Credentials: <code>admin</code> / <code>admin123</code></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN ADMIN DASHBOARD -->
+    <main class="dashboard-wrapper" id="dashboardScreen" style="display: none;">
+        
+        <!-- DASHBOARD HEADER -->
+        <header class="dashboard-header">
+            <div>
+                <span class="sub-tag">ADMINISTRATION & FULFILLMENT</span>
+                <h1>Orders Dashboard</h1>
+                <p class="header-desc">Manage real-time customer orders, update kitchen fulfillment status, and inspect user purchase histories.</p>
+            </div>
+            <div class="header-actions">
+                <button class="action-btn secondary-btn" id="refreshOrdersBtn">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                </button>
+                <button class="action-btn secondary-btn" id="seedDemoDataBtn" title="Load sample multi-user orders for testing">
+                    <i class="fa-solid fa-database"></i> Reset Demo Data
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI METRICS -->
+        <section class="metrics-grid">
+            <div class="metric-card total-metric">
+                <div class="metric-icon"><i class="fa-solid fa-receipt"></i></div>
+                <div class="metric-details">
+                    <span class="metric-label">Total Orders</span>
+                    <h3 class="metric-value" id="kpiTotalOrders">0</h3>
+                </div>
+            </div>
+
+            <div class="metric-card ongoing-metric">
+                <div class="metric-icon"><i class="fa-solid fa-clock"></i></div>
+                <div class="metric-details">
+                    <span class="metric-label">Active / Ongoing</span>
+                    <h3 class="metric-value" id="kpiOngoingOrders">0</h3>
+                </div>
+            </div>
+
+            <div class="metric-card completed-metric">
+                <div class="metric-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="metric-details">
+                    <span class="metric-label">Completed</span>
+                    <h3 class="metric-value" id="kpiCompletedOrders">0</h3>
+                </div>
+            </div>
+
+            <div class="metric-card cancelled-metric">
+                <div class="metric-icon"><i class="fa-solid fa-ban"></i></div>
+                <div class="metric-details">
+                    <span class="metric-label">Cancelled</span>
+                    <h3 class="metric-value" id="kpiCancelledOrders">0</h3>
+                </div>
+            </div>
+
+            <div class="metric-card revenue-metric">
+                <div class="metric-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                <div class="metric-details">
+                    <span class="metric-label">Total Revenue</span>
+                    <h3 class="metric-value" id="kpiTotalRevenue">₹0</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: LIVE ORDERS MANAGEMENT -->
+        <section class="admin-section">
+            <div class="section-top-bar">
+                <div class="section-title-wrap">
+                    <h2><i class="fa-solid fa-list-check"></i> Incoming & Active Orders</h2>
+                    <p>Review customer orders and update their status as kitchen prepares and delivers them.</p>
+                </div>
+
+                <!-- SEARCH & FILTERS -->
+                <div class="filter-controls">
+                    <div class="search-input-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="orderSearchInput" placeholder="Search by Order ID, User, or Item...">
+                    </div>
+
+                    <div class="status-tab-group">
+                        <button class="status-tab active" data-filter="all">All</button>
+                        <button class="status-tab" data-filter="ongoing">Ongoing</button>
+                        <button class="status-tab" data-filter="completed">Completed</button>
+                        <button class="status-tab" data-filter="cancelled">Cancelled</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORDERS TABLE / LIST -->
+            <div class="orders-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer / Device</th>
+                            <th>Timestamp</th>
+                            <th>Items & Quantities</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Dynamically populated via admin.js -->
+                    </tbody>
+                </table>
+
+                <div class="table-empty-state" id="tableEmptyState" style="display: none;">
+                    <i class="fa-solid fa-mug-hot"></i>
+                    <h3>No orders found</h3>
+                    <p>There are no orders matching your current filter criteria.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: USER / DEVICE HISTORY INSPECTOR -->
+        <section class="admin-section user-inspector-section">
+            <div class="section-top-bar">
+                <div class="section-title-wrap">
+                    <h2><i class="fa-solid fa-user-clock"></i> Customer Order History Inspector</h2>
+                    <p>Select any device or customer to view their complete lifetime order history and spending analytics.</p>
+                </div>
+
+                <div class="user-picker-wrap">
+                    <label for="userSelectDropdown"><i class="fa-solid fa-mobile-screen"></i> Select Customer / Device:</label>
+                    <select id="userSelectDropdown" class="user-select-dropdown">
+                        <!-- Populated dynamically via admin.js -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- USER SUMMARY CARD -->
+            <div class="user-summary-card" id="userSummaryCard">
+                <div class="user-summary-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="user-summary-info">
+                    <h3 id="inspectUserName">Guest User</h3>
+                    <p id="inspectUserId">Device ID: —</p>
+                </div>
+                <div class="user-summary-metrics">
+                    <div class="user-metric-box">
+                        <span class="lbl">Lifetime Orders</span>
+                        <strong class="val" id="inspectOrderCount">0</strong>
+                    </div>
+                    <div class="user-metric-box">
+                        <span class="lbl">Total Spent</span>
+                        <strong class="val" id="inspectTotalSpent">₹0</strong>
+                    </div>
+                    <div class="user-metric-box">
+                        <span class="lbl">Completed</span>
+                        <strong class="val" id="inspectCompletedCount">0</strong>
+                    </div>
+                    <div class="user-metric-box">
+                        <span class="lbl">Cancelled</span>
+                        <strong class="val" id="inspectCancelledCount">0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SELECTED USER'S ORDER LIST -->
+            <div class="user-history-list" id="userHistoryList">
+                <!-- Populated dynamically via admin.js -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div class="admin-toast-container" id="adminToastContainer"></div>
+
+    <script src="../script/admin.js"></script>
+</body>
+</html>
