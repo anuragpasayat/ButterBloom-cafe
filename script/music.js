@@ -1,25 +1,17 @@
-const musicPlayer=document.getElementById("musicPlayer");
-const bgMusic=document.getElementById("bgMusic");
+const musicPlayer = document.getElementById("musicPlayer");
+const bgMusic = document.getElementById("bgMusic");
 
-let playing=false;
+let playing = false;
 
-
-musicPlayer.addEventListener("click",()=>{
-
-    if(playing){
-
-        bgMusic.pause();
-
-    }
-
-    else{
-
-        bgMusic.play();
-
-    }
-
-    playing=!playing;
-
-});
-
-musicPlayer.classList.toggle("playing");
+if (musicPlayer && bgMusic) {
+    musicPlayer.addEventListener("click", () => {
+        if (playing) {
+            bgMusic.pause();
+            musicPlayer.classList.remove("playing");
+        } else {
+            bgMusic.play().catch(() => {});
+            musicPlayer.classList.add("playing");
+        }
+        playing = !playing;
+    });
+}
