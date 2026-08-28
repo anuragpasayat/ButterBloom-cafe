@@ -31,16 +31,50 @@ const orderImages = {
     matcha: "../images/drinks/matcha.jpg"
 };
 
-function getOrders(){
-
-    return JSON.parse(localStorage.getItem("orders")) || [];
-
+function getOrCreateDeviceId() {
+    let deviceId = localStorage.getItem("butterbloom_device_id");
+    if (!deviceId) {
+        deviceId = "DEV-" + Math.floor(1000 + Math.random() * 9000);
+        localStorage.setItem("butterbloom_device_id", deviceId);
+    }
+    return deviceId;
 }
 
-function saveOrders(orders){
+function getOrders(){
+    const myDeviceId = getOrCreateDeviceId();
+    const allOrdersRaw = localStorage.getItem("butterbloom_all_orders");
+    
+    if (allOrdersRaw) {
+        try {
+            const allOrders = JSON.parse(allOrdersRaw);
+            if (Array.isArray(allOrders)) {
+                return allOrders.filter(o => o.userId === myDeviceId);
+            }
+        } catch {}
+    }
 
-    localStorage.setItem("orders", JSON.stringify(orders));
+    return JSON.parse(localStorage.getItem("orders")) || [];
+}
 
+function saveOrders(myOrders){
+    localStorage.setItem("orders", JSON.stringify(myOrders));
+    
+    const myDeviceId = getOrCreateDeviceId();
+    const allOrdersRaw = localStorage.getItem("butterbloom_all_orders");
+    let allOrders = [];
+    
+    if (allOrdersRaw) {
+        try {
+            allOrders = JSON.parse(allOrdersRaw) || [];
+        } catch {}
+    }
+
+    // Replace or merge current device's orders in all_orders
+    const otherOrders = allOrders.filter(o => o.userId !== myDeviceId);
+    const merged = [...myOrders, ...otherOrders];
+    localStorage.setItem("butterbloom_all_orders", JSON.stringify(merged));
+    
+    window.dispatchEvent(new Event("ordersUpdated"));
 }
 
 let orderCards = [];
@@ -184,10 +218,24 @@ function placeOrder(){
         return;
     }
 
+    const deviceId = getOrCreateDeviceId();
+    const totalPrice = cartItems.reduce((sum, item) => {
+        const qty = Number(item.quantity) || 1;
+        return sum + parsePrice(item.price) * qty;
+    }, 0);
+
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" }) + ", " +
+                          now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+
     const newOrder = {
         orderId: Date.now().toString().slice(-6),
+        userId: deviceId,
+        userName: `Device ${deviceId}`,
+        timestamp: formattedDate,
         status: "ongoing",
-        items: cartItems
+        items: cartItems,
+        total: totalPrice
     };
 
     orders.unshift(newOrder);
@@ -324,4 +372,15 @@ contactForm.addEventListener("submit",(e)=>{
     alert("Thank you! We'll contact you soon.");
     contactForm.reset();
     popup.classList.remove("show");
+});
+
+// Real-time synchronization with Admin dashboard status changes
+window.addEventListener("storage", (e) => {
+    if (e.key === "orders" || e.key === "butterbloom_all_orders") {
+        renderOrders();
+    }
+});
+
+window.addEventListener("ordersUpdated", () => {
+    renderOrders();
 });
