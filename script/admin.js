@@ -288,22 +288,39 @@ function renderOrdersTable() {
         }
 
         row.innerHTML = `
-            <td class="order-id-cell">#${escapeHtml(String(order.orderId))}</td>
-            <td class="customer-cell">
-                <span class="customer-name">${escapeHtml(order.userName || "Customer")}</span>
-                <span class="customer-device">${escapeHtml(order.userId || "DEV-000")}</span>
+            <td class="order-id-cell">
+                <span class="m-card-label">Order</span>
+                <span class="order-id-txt">#${escapeHtml(String(order.orderId))}</span>
             </td>
-            <td>${escapeHtml(order.timestamp || "Recent")}</td>
-            <td>
+            <td class="customer-cell">
+                <span class="m-card-label">Customer</span>
+                <div class="cust-info">
+                    <span class="customer-name">${escapeHtml(order.userName || "Customer")}</span>
+                    <span class="customer-device">${escapeHtml(order.userId || "DEV-000")}</span>
+                </div>
+            </td>
+            <td class="date-cell">
+                <span class="m-card-label">Time</span>
+                <span class="date-txt"><i class="fa-regular fa-clock"></i> ${escapeHtml(order.timestamp || "Recent")}</span>
+            </td>
+            <td class="items-cell">
+                <span class="m-card-label">Items</span>
                 <ul class="items-cell-list">${itemsListHtml}</ul>
             </td>
-            <td class="price-cell">₹${order.total || 0}</td>
-            <td>
+            <td class="price-cell">
+                <span class="m-card-label">Total</span>
+                <span class="price-val">₹${order.total || 0}</span>
+            </td>
+            <td class="status-cell">
+                <span class="m-card-label">Status</span>
                 <span class="status-badge ${order.status}">
                     <i class="fa-solid ${getStatusIcon(order.status)}"></i> ${order.status}
                 </span>
             </td>
-            <td>${actionsHtml}</td>
+            <td class="actions-cell">
+                <span class="m-card-label">Actions</span>
+                ${actionsHtml}
+            </td>
         `;
 
         ordersTableBody.appendChild(row);
@@ -544,4 +561,34 @@ window.addEventListener("ordersUpdated", () => {
 document.addEventListener("DOMContentLoaded", () => {
     getOrCreateDeviceId();
     checkAuth();
+
+    // Mobile Navbar Hamburger Toggle
+    const adminMenuToggle = document.getElementById("adminMenuToggle");
+    const adminNavLinks = document.getElementById("adminNavLinks");
+
+    if (adminMenuToggle && adminNavLinks) {
+        adminMenuToggle.addEventListener("click", (e) => {
+            e.stopPropagation();
+            adminNavLinks.classList.toggle("open");
+            const isOpen = adminNavLinks.classList.contains("open");
+            adminMenuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            adminMenuToggle.innerHTML = isOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!adminMenuToggle.contains(e.target) && !adminNavLinks.contains(e.target)) {
+                adminNavLinks.classList.remove("open");
+                adminMenuToggle.setAttribute("aria-expanded", "false");
+                adminMenuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            }
+        });
+
+        adminNavLinks.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", () => {
+                adminNavLinks.classList.remove("open");
+                adminMenuToggle.setAttribute("aria-expanded", "false");
+                adminMenuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            });
+        });
+    }
 });
