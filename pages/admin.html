@@ -22,18 +22,23 @@
             <a href="../index.html" class="admin-logo-link">
                 <img src="../images/logo3.PNG" alt="ButterBloom Logo" class="admin-logo-img">
             </a>
-            <span class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Staff Portal</span>
+            <span class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Staff</span>
         </div>
 
-        <ul class="admin-nav-links">
+        <ul class="admin-nav-links" id="adminNavLinks">
             <li><a href="../index.html"><i class="fa-solid fa-store"></i> Customer Site</a></li>
             <li><a href="menu.html"><i class="fa-solid fa-utensils"></i> Menu</a></li>
             <li><a href="orders.html"><i class="fa-solid fa-bag-shopping"></i> My Orders</a></li>
         </ul>
 
-        <div class="admin-user-control" id="adminUserControl" style="display: none;">
-            <span class="admin-logged-as"><i class="fa-solid fa-user-gear"></i> Admin</span>
-            <button class="logout-btn" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        <div class="admin-right-controls">
+            <div class="admin-user-control" id="adminUserControl" style="display: none;">
+                <span class="admin-logged-as"><i class="fa-solid fa-user-gear"></i> <span class="admin-label-text">Admin</span></span>
+                <button class="logout-btn" id="logoutBtn" title="Logout"><i class="fa-solid fa-right-from-bracket"></i> <span class="logout-text">Logout</span></button>
+            </div>
+            <button class="admin-hamburger-btn" id="adminMenuToggle" aria-label="Toggle Navigation" aria-expanded="false">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
     </nav>
 
